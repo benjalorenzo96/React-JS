@@ -1,11 +1,17 @@
-import React from 'react';
+import React from "react";
+import ItemList from "./ItemList.jsx";
 
-function ItemListContainer(props) {
+const ItemListContainer = ({ items }) => {
   return (
     <div>
-      <h1>{props.message}</h1>
+      <h1>Nuestros Productos</h1>
+      <ItemList items={items} />
     </div>
   );
-}
+};
 
 export default ItemListContainer;
+
+
+
+
