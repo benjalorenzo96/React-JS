@@ -1,42 +1,29 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { useCartContext } from '../context/CartContext';
-import CartWidget from './CartWidget';
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import ItemDetail from "../components/ItemDetail";
+import { getItems } from "../mockAPI";
+import { useCartContext } from "../components/UseCartContext";
 
-function ItemDetailContainer({ items }) {
-  const { itemId } = useParams();
+const ItemDetailContainer = () => {
+  const [item, setItem] = useState({});
+  const { id } = useParams();
   const { addItem } = useCartContext();
-  const [quantity, setQuantity] = useState(1);
 
-  const selectedItem = items.find((item) => item.id === itemId);
+  useEffect(() => {
+    const fetchItems = async () => {
+      const items = await getItems();
+      const item = items.find((item) => item.id === parseInt(id)); 
+      setItem(item);
+    };
+    fetchItems();
+  }, [id]);
 
-  const handleAddToCart = () => {
-    addItem(selectedItem, quantity);
+  const handleAddItem = (quantity) => {
+    addItem({ ...item, quantity });
   };
 
-  return (
-    <div>
-      <h1>Detalle de Producto</h1>
-      <div>
-        <img src={selectedItem.image} alt={selectedItem.title} />
-        <h3>{selectedItem.title}</h3>
-        <p>{selectedItem.description}</p>
-        <h4>{`Precio: $${selectedItem.price}`}</h4>
-        <label htmlFor="quantity">Cantidad:</label>
-        <input
-          type="number"
-          id="quantity"
-          name="quantity"
-          value={quantity}
-          onChange={(e) => setQuantity(e.target.value)}
-          min={1}
-        />
-        <button onClick={handleAddToCart}>Agregar al carrito</button>
-        <CartWidget />
-      </div>
-    </div>
-  );
-}
+  return <ItemDetail item={item} handleAddItem={handleAddItem} />;
+};
 
 export default ItemDetailContainer;
 

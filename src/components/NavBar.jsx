@@ -1,16 +1,12 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
-import React, { useState } from "react";
+import React from "react";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
-import CartWidget from "./CartWidget";
 import { Link } from "react-router-dom";
+import { useCartContext } from "../components/UseCartContext";
 
 function NavBar() {
-  const [cartItems, setCartItems] = useState([]);
-
-  function handleAddToCart(productId) {
-    setCartItems([...cartItems, productId]);
-  }
+  const { cart } = useCartContext();
 
   return (
     <Navbar bg="light" expand="lg">
@@ -40,14 +36,14 @@ function NavBar() {
             </NavDropdown.Item>
           </NavDropdown>
         </Nav>
-        <CartWidget count={cartItems.length} />
-        <Link to="/cart"><FontAwesomeIcon icon={faShoppingCart} /></Link>
+        <Link to="/cart"><FontAwesomeIcon icon={faShoppingCart} /> ({cart.length})</Link>
       </Navbar.Collapse>
     </Navbar>
   );
 }
 
 export default NavBar;
+
 
 
 

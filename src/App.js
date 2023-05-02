@@ -1,41 +1,63 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Cart from './components/Cart';
-import ItemListContainer from './containers/ItemListContainer';
-import ItemDetailContainer from './containers/ItemDetailContainer';
+import { BrowserRouter, Route } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import ItemListContainer from './components/ItemListContainer';
+import ItemDetailContainer from './components/ItemDetailContainer';
+import NavBar from './components/NavBar';
+import CartWidget from './components/CartWidget';
+import { getItemsByCategory, getItemById, getCategories } from './mockAPI';
+import { CartProvider } from './components/UseCartContext';
 
-const App = () => {
+function App() {
   const [cartItems, setCartItems] = useState([]);
-
-  const handleAddToCart = (item) => {
-    setCartItems([...cartItems, item]);
-  };
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    // fetch async-mocks data here and handle it accordingly
+    const fetchCategories = async () => {
+      const data = await getCategories();
+      setCategories(data);
+    };
+    fetchCategories();
   }, []);
 
+  const handleAddToCart = (item, quantity) => {
+    const itemIndex = cartItems.findIndex((cartItem) => cartItem.id === item.id);
+    if (itemIndex === -1) {
+      setCartItems([...cartItems, { ...item, quantity }]);
+    } else {
+      const newCartItems = [...cartItems];
+      newCartItems[itemIndex].quantity += quantity;
+      setCartItems(newCartItems);
+    }
+  };
+
+  const handleRemoveFromCart = (item) => {
+    const newCartItems = cartItems.filter((cartItem) => cartItem.id !== item.id);
+    setCartItems(newCartItems);
+  };
+
   return (
-    <BrowserRouter>
-      <Navbar />
-      <Cart cartItems={cartItems} />
-      <Switch>
-        <Route exact path="/" component={ItemListContainer} />
-        <Route exact path="/category/:id" component={ItemListContainer} />
-        <Route
-          exact
-          path="/item/:id"
-          render={(props) => (
-            <ItemDetailContainer {...props} handleAddToCart={handleAddToCart} />
-          )}
-        />
-      </Switch>
-    </BrowserRouter>
+    <CartProvider> 
+      <BrowserRouter>
+        <NavBar brandLink="/" categories={categories} />
+        <CartWidget cartItems={cartItems} onRemoveFromCart={handleRemoveFromCart} /> 
+        <Route exact path="/">
+          <ItemListContainer onAddToCart={handleAddToCart} />
+        </Route>
+        <Route exact path="/category/:categoryId">
+          <ItemListContainer onAddToCart={handleAddToCart} getItems={getItemsByCategory} />
+        </Route>
+        <Route exact path="/item/:itemId">
+          <ItemDetailContainer onAddToCart={handleAddToCart} getItem={getItemById} />
+        </Route>
+      </BrowserRouter>
+    </CartProvider> 
   );
-};
+}
 
 export default App;
+
+
+
 
 
 
