@@ -1,30 +1,18 @@
 import React from "react";
-import { getItemById } from "../mockAPI";
+import Item from "./Item";
 
 const ItemList = ({ items }) => {
   return (
     <div className="row">
       {items.map((item) => (
-        <div className="col-md-4" key={item.id}>
-          <h2>{item.name}</h2>
-          <p>{item.description}</p>
-          <p>Precio: ${item.price}</p>
-          <img src={item.image} alt={item.name} />
-          <button>Añadir al carrito</button>
-          <p>Categoría: {item.category}</p>
-          {getItemById(item.id).then((itemDetail) => (
-            <div>
-              <h3>Detalles del producto</h3>
-              <p>{itemDetail.description}</p>
-            </div>
-          ))}
-        </div>
+        <Item key={item.id} item={item} />
       ))}
     </div>
   );
 };
 
 export default ItemList;
+
 
 
 

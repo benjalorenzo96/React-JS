@@ -11,8 +11,8 @@ const ItemListContainer = () => {
     const fetchItems = async () => {
       const fetchedItems = await getItems();
       if (id) {
-        const filteredItems = fetchedItems.filter((item) => item.category === id);
-        setItems(filteredItems);
+        const item = fetchedItems.find((item) => item.id === id);
+        setItems([item]);
       } else {
         setItems(fetchedItems);
       }
@@ -28,6 +28,7 @@ const ItemListContainer = () => {
 };
 
 export default ItemListContainer;
+
 
 
 

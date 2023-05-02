@@ -1,4 +1,4 @@
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import ItemListContainer from './components/ItemListContainer';
 import ItemDetailContainer from './components/ItemDetailContainer';
@@ -6,6 +6,8 @@ import NavBar from './components/NavBar';
 import CartWidget from './components/CartWidget';
 import { getItemsByCategory, getItemById, getCategories } from './mockAPI';
 import { CartProvider } from './components/UseCartContext';
+
+import './index.css'
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
@@ -40,21 +42,18 @@ function App() {
       <BrowserRouter>
         <NavBar brandLink="/" categories={categories} />
         <CartWidget cartItems={cartItems} onRemoveFromCart={handleRemoveFromCart} /> 
-        <Route exact path="/">
-          <ItemListContainer onAddToCart={handleAddToCart} />
-        </Route>
-        <Route exact path="/category/:categoryId">
-          <ItemListContainer onAddToCart={handleAddToCart} getItems={getItemsByCategory} />
-        </Route>
-        <Route exact path="/item/:itemId">
-          <ItemDetailContainer onAddToCart={handleAddToCart} getItem={getItemById} />
-        </Route>
+        <Routes>
+          <Route path="/" element={<ItemListContainer onAddToCart={handleAddToCart} />} />
+          <Route path="/category/:categoryId" element={<ItemListContainer onAddToCart={handleAddToCart} getItems={getItemsByCategory} />} />
+          <Route path="/item/:itemId" element={<ItemDetailContainer onAddToCart={handleAddToCart} getItem={getItemById} />} />
+        </Routes>
       </BrowserRouter>
     </CartProvider> 
   );
 }
 
 export default App;
+
 
 
 
