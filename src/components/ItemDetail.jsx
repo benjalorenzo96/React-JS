@@ -1,14 +1,15 @@
-import React from "react";
+import React from 'react';
 
-const ItemDetail = ({ item }) => {
+function ItemDetail({ name, description, price, pictureUrl }) {
   return (
     <div>
-      <h2>{item.title}</h2>
-      <img src={item.pictureUrl} alt={item.title} />
-      <p>{item.description}</p>
-      <h3>${item.price}</h3>
+      <h1>{name}</h1>
+      <p>{description}</p>
+      <p>${price}</p>
+      <img src={pictureUrl} alt={name} />
     </div>
   );
-};
+}
 
 export default ItemDetail;
+

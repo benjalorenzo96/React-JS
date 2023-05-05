@@ -1,33 +1,43 @@
-import React, { useState, useEffect } from "react";
-import ItemList from "./ItemList";
+import { useEffect, useState } from 'react';
+import ItemList from './ItemList';
+import { getItemsByCategory } from '../mockAPI';
 import { useParams } from "react-router-dom";
-import { getItems } from "../mockAPI";
 
-const ItemListContainer = () => {
+
+const ItemListContainer = ({ greeting }) => {
+  const { categoryId } = useParams();
   const [items, setItems] = useState([]);
-  const { id } = useParams();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchItems = async () => {
-      const fetchedItems = await getItems();
-      if (id) {
-        const item = fetchedItems.find((item) => item.id === id);
-        setItems([item]);
-      } else {
-        setItems(fetchedItems);
+      try {
+        const items = await getItemsByCategory(categoryId);
+        setItems(items);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
       }
     };
+
     fetchItems();
-  }, [id]);
+  }, [categoryId]);
 
   return (
-    <div>
-      <ItemList items={items} />
-    </div>
+    <>
+      <h1>{greeting}</h1>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <ItemList items={items} />
+      )}
+    </>
   );
 };
 
 export default ItemListContainer;
+
+
 
 
 

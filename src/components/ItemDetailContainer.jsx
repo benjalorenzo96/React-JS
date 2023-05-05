@@ -1,29 +1,40 @@
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from 'react';
+import ItemDetail from './ItemDetail';
+import { getItemById } from '../mockAPI';
 import { useParams } from "react-router-dom";
-import ItemDetail from "../components/ItemDetail";
-import { getItems } from "../mockAPI";
-import { useCartContext } from "../components/UseCartContext";
 
-const ItemDetailContainer = () => {
-  const [item, setItem] = useState({});
-  const { id } = useParams();
-  const { addItem } = useCartContext();
+function ItemDetailContainer() {
+  const { itemId } = useParams();
+  const [item, setItem] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchItems = async () => {
-      const items = await getItems();
-      const item = items.find((item) => item.id === parseInt(id)); 
-      setItem(item);
+    const fetchItem = async () => {
+      try {
+        const id = parseInt(itemId);
+        const item = await getItemById(id);
+        setItem(item);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
     };
-    fetchItems();
-  }, [id]);
 
-  const handleAddItem = (quantity) => {
-    addItem({ ...item, quantity });
-  };
+    fetchItem();
+  }, [itemId]);
 
-  return <ItemDetail item={item} handleAddItem={handleAddItem} />;
-};
+  return (
+    <>
+      {loading ? (
+        <p>Cargando...</p>
+      ) : (
+        <ItemDetail item={item} />
+      )}
+    </>
+  );
+}
 
 export default ItemDetailContainer;
+
+
 
