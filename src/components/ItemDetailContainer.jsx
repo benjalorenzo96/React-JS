@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ItemDetail from './ItemDetail';
-import { getItemById } from '../mockAPI';
-import { useParams } from "react-router-dom";
+import { useParams } from 'react-router-dom';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
 
 function ItemDetailContainer() {
   const { itemId } = useParams();
@@ -11,9 +12,10 @@ function ItemDetailContainer() {
   useEffect(() => {
     const fetchItem = async () => {
       try {
-        const id = parseInt(itemId);
-        const item = await getItemById(id);
-        setItem(item);
+        const itemDoc = await firebase.firestore().collection('items').doc(itemId).get();
+
+        const itemData = itemDoc.data();
+        setItem(itemData);
         setLoading(false);
       } catch (error) {
         console.log(error);
@@ -26,7 +28,7 @@ function ItemDetailContainer() {
   return (
     <>
       {loading ? (
-        <p>Cargando...</p>
+        <p>Loading...</p>
       ) : (
         <ItemDetail item={item} />
       )}
@@ -35,6 +37,7 @@ function ItemDetailContainer() {
 }
 
 export default ItemDetailContainer;
+
 
 
 

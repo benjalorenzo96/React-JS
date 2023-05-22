@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ItemList from './ItemList';
-import { getItemsByCategory, getItems } from '../mockAPI';
-import { useParams } from "react-router-dom";
+import { useParams } from 'react-router-dom';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
 
 const ItemListContainer = ({ greeting }) => {
   const { categoryId } = useParams();
@@ -11,12 +12,16 @@ const ItemListContainer = ({ greeting }) => {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        let fetchedItems;
+        const itemsCollection = firebase.firestore().collection('items');
+
+        let query = itemsCollection;
         if (categoryId) {
-          fetchedItems = await getItemsByCategory(categoryId);
-        } else {
-          fetchedItems = await getItems();
+          query = query.where('categoryld', '==', categoryId);
         }
+
+        const querySnapshot = await query.get();
+
+        const fetchedItems = querySnapshot.docs.map((doc) => doc.data());
         setItems(fetchedItems);
         setLoading(false);
       } catch (error) {
