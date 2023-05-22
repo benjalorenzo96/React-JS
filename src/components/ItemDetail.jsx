@@ -1,15 +1,24 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import ItemCount from './ItemCount';
 import { Link } from 'react-router-dom';
 import { CartContext } from './CartContext';
-import { getItems } from '../mockAPI'; // Importa la función getItem desde mockAPI.js
+import { getItemById } from '../mockAPI'; // Importa la función getItemById desde mockAPI.js
 
 function ItemDetail({ itemId }) {
   const [quantity, setQuantity] = useState(0);
   const [showItemCount, setShowItemCount] = useState(true);
   const { addItem } = useContext(CartContext);
+  const [item, setItem] = useState(null); // Estado para almacenar el objeto del producto
 
-  const item = getItems(itemId); // Obtiene el objeto de producto utilizando la función getItem
+  useEffect(() => {
+    // Obtiene el objeto del producto utilizando getItemById(itemId)
+    const fetchItem = async () => {
+      const item = await getItemById(itemId);
+      setItem(item);
+    };
+
+    fetchItem();
+  }, [itemId]);
 
   const handleAddToCart = () => {
     addItem(item, quantity);
@@ -24,7 +33,7 @@ function ItemDetail({ itemId }) {
     <div>
       <h1>Item Detail</h1>
 
-      {showItemCount && (
+      {item && showItemCount && (
         <ItemCount
           initial={quantity}
           min={0}
@@ -42,6 +51,7 @@ function ItemDetail({ itemId }) {
 }
 
 export default ItemDetail;
+
 
 
 

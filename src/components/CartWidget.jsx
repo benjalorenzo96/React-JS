@@ -5,18 +5,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 const CartWidget = () => {
-  const { cart } = useCartContext();
+  const { cartItems } = useCartContext();
 
-  if (!cart) {
+  if (!cartItems) {
     return null;
   }
 
   return (
     <div className="cart-widget">
-      {cart.length > 0 ? (
+      {cartItems.length > 0 ? (
         <Link to="/cart">
           <FontAwesomeIcon icon={faShoppingCart} />
-          <span className="item-count">{cart.length}</span>
+          <span className="item-count">{cartItems.length}</span>
         </Link>
       ) : null}
     </div>
@@ -24,6 +24,7 @@ const CartWidget = () => {
 };
 
 export default CartWidget;
+
 
 
 

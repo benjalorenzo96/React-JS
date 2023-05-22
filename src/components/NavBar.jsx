@@ -3,7 +3,7 @@ import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { CartProvider, useCartContext } from "../components/UseCartContext";
+import { CartProvider, useCartContext } from "./CartContext";
 
 
 function NavBar() {

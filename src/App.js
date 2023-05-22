@@ -5,7 +5,7 @@ import ItemDetailContainer from './components/ItemDetailContainer';
 import NavBar from './components/NavBar';
 import CartWidget from './components/CartWidget';
 import { getItemsByCategory, getItemById, getCategories } from './mockAPI';
-import { CartProvider, useCartContext } from './components/CartContext';
+import { useCartContext } from './components/CartContext';
 
 import './index.css';
 
@@ -33,7 +33,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <CartProvider> {/* Mover CartProvider alrededor de la estructura de la aplicación */}
+     
         <NavBar brandLink="/" categories={categories} />
         <CartWidget />
         <Routes>
@@ -60,8 +60,8 @@ function App() {
             }
           />
         </Routes>
-      </CartProvider>
     </BrowserRouter>
+
   );
 }
 
