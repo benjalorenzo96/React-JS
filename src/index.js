@@ -1,14 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { CartProvider } from './components/CartContext';
 
-ReactDOM.render(
-  <React.StrictMode>
+const rootElement = document.getElementById('root');
+
+ReactDOM.createRoot(rootElement).render(
+  <CartProvider>
     <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+  </CartProvider>
 );
+
+
 
 
 

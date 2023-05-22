@@ -3,12 +3,14 @@ import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { useCartContext } from "../components/UseCartContext";
+import { CartProvider, useCartContext } from "../components/UseCartContext";
+
 
 function NavBar() {
-  const { cart } = useCartContext();
+  const { cartItems } = useCartContext();
 
   return (
+    <CartProvider>
     <Navbar bg="light" expand="lg">
       <Navbar.Brand as={Link} to="/">
         Cuadros
@@ -36,13 +38,18 @@ function NavBar() {
             </NavDropdown.Item>
           </NavDropdown>
         </Nav>
-        <Link to="/cart"><FontAwesomeIcon icon={faShoppingCart} /> ({cart.length})</Link>
+        <Link to="/cart">
+          <FontAwesomeIcon icon={faShoppingCart} />{" "}
+          {cartItems && cartItems.length ? `(${cartItems.length})` : "(0)"}
+        </Link>
       </Navbar.Collapse>
     </Navbar>
+    </CartProvider>
   );
 }
 
 export default NavBar;
+
 
 
 

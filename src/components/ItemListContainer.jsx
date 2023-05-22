@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import ItemList from './ItemList';
-import { getItemsByCategory } from '../mockAPI';
+import { getItemsByCategory, getItems } from '../mockAPI';
 import { useParams } from "react-router-dom";
-
 
 const ItemListContainer = ({ greeting }) => {
   const { categoryId } = useParams();
@@ -12,8 +11,13 @@ const ItemListContainer = ({ greeting }) => {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const items = await getItemsByCategory(categoryId);
-        setItems(items);
+        let fetchedItems;
+        if (categoryId) {
+          fetchedItems = await getItemsByCategory(categoryId);
+        } else {
+          fetchedItems = await getItems();
+        }
+        setItems(fetchedItems);
         setLoading(false);
       } catch (error) {
         console.log(error);
@@ -36,6 +40,7 @@ const ItemListContainer = ({ greeting }) => {
 };
 
 export default ItemListContainer;
+
 
 
 

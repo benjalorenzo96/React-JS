@@ -1,16 +1,16 @@
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { useState, useEffect } from 'react';
 import ItemListContainer from './components/ItemListContainer';
 import ItemDetailContainer from './components/ItemDetailContainer';
 import NavBar from './components/NavBar';
 import CartWidget from './components/CartWidget';
 import { getItemsByCategory, getItemById, getCategories } from './mockAPI';
-import { CartProvider } from './components/UseCartContext';
+import { CartProvider, useCartContext } from './components/CartContext';
 
-import './index.css'
+import './index.css';
 
 function App() {
-  const [cartItems, setCartItems] = useState([]);
+  const { cartItems, addItemToCart } = useCartContext();
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
@@ -24,43 +24,47 @@ function App() {
   const handleAddToCart = (item, quantity) => {
     const itemIndex = cartItems.findIndex((cartItem) => cartItem.id === item.id);
     if (itemIndex === -1) {
-      setCartItems([...cartItems, { ...item, quantity }]);
+      addItemToCart({ ...item, quantity });
     } else {
       const newCartItems = [...cartItems];
       newCartItems[itemIndex].quantity += quantity;
-      setCartItems(newCartItems);
     }
   };
 
-  const handleRemoveFromCart = (item) => {
-    const newCartItems = cartItems.filter((cartItem) => cartItem.id !== item.id);
-    setCartItems(newCartItems);
-  };
-
   return (
-    <CartProvider> 
-      <BrowserRouter>
+    <BrowserRouter>
+      <CartProvider> {/* Mover CartProvider alrededor de la estructura de la aplicación */}
         <NavBar brandLink="/" categories={categories} />
-        <CartWidget cartItems={cartItems} onRemoveFromCart={handleRemoveFromCart} /> 
+        <CartWidget />
         <Routes>
-          <Route path="/" element={<ItemListContainer onAddToCart={handleAddToCart} />} />
-          <Route path="/category/:categoryId" element={<ItemListContainer onAddToCart={handleAddToCart} getItems={getItemsByCategory} />} />
-          <Route path="/item/:itemId" element={<ItemDetailContainer onAddToCart={handleAddToCart} getItem={getItemById} />} />
+          <Route
+            path="/"
+            element={<ItemListContainer onAddToCart={handleAddToCart} />}
+          />
+          <Route
+            path="/category/:categoryId"
+            element={
+              <ItemListContainer
+                onAddToCart={handleAddToCart}
+                getItems={getItemsByCategory}
+              />
+            }
+          />
+          <Route
+            path="/item/:itemId"
+            element={
+              <ItemDetailContainer
+                onAddToCart={handleAddToCart}
+                getItem={getItemById}
+              />
+            }
+          />
         </Routes>
-      </BrowserRouter>
-    </CartProvider> 
+      </CartProvider>
+    </BrowserRouter>
   );
 }
 
 export default App;
-
-
-
-
-
-
-
-
-
 
 

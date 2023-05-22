@@ -1,7 +1,8 @@
-import React, { useContext } from 'react';
-import { createContext, useState } from "react";
+import React, { createContext, useContext, useState } from 'react';
 
 export const CartContext = createContext();
+
+export const useCartContext = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
@@ -10,9 +11,9 @@ export const CartProvider = ({ children }) => {
     setCartItems([...cartItems, item]);
   };
 
-  const removeItemFromCart = (item) => {
+  const removeItemFromCart = (itemId) => {
     const updatedCartItems = cartItems.filter(
-      (cartItem) => cartItem.id !== item.id
+      (cartItem) => cartItem.id !== itemId
     );
     setCartItems(updatedCartItems);
   };
@@ -28,14 +29,5 @@ export const CartProvider = ({ children }) => {
   );
 };
 
-export const useCartContext = () => {
-  const cartContext = useContext(CartContext);
-  if (!cartContext) {
-    throw new Error(
-      "useCartContext debe ser usado dentro de un CartProvider"
-    );
-  }
-  return cartContext;
-};
 
 

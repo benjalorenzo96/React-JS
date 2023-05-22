@@ -1,32 +1,33 @@
-import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
-import { useCartContext } from "../components/UseCartContext";
+import React from 'react';
+import { useCartContext } from './CartContext';
+import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
-function CartWidget({ onRemoveFromCart }) {
+const CartWidget = () => {
   const { cart } = useCartContext();
-  const itemCount = cart.reduce((total, item) => total + item.quantity, 0);
+
+  if (!cart) {
+    return null;
+  }
 
   return (
     <div className="cart-widget">
-      <FontAwesomeIcon icon={faShoppingCart} />
-      <span className="cart-count">{itemCount}</span>
-      {cart.length > 0 && (
-        <div className="cart-items">
-          <ul>
-            {cart.map((item) => (
-              <li key={item.id}>
-                {item.title} x {item.quantity}{" "}
-                {onRemoveFromCart && (
-                  <button onClick={() => onRemoveFromCart(item)}>Remove</button>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      {cart.length > 0 ? (
+        <Link to="/cart">
+          <FontAwesomeIcon icon={faShoppingCart} />
+          <span className="item-count">{cart.length}</span>
+        </Link>
+      ) : null}
     </div>
   );
-}
+};
 
 export default CartWidget;
+
+
+
+
+
+
+
