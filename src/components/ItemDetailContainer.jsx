@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import ItemDetail from './ItemDetail';
 import { useParams } from 'react-router-dom';
-import firebase from 'firebase/app';
-import 'firebase/firestore';
+import firebase from 'firebase/compat/app'; // Actualizado
+
+import 'firebase/compat/firestore'; // Actualizado
+
 
 function ItemDetailContainer() {
   const { itemId } = useParams();
@@ -13,7 +15,7 @@ function ItemDetailContainer() {
     const fetchItem = async () => {
       try {
         const itemDoc = await firebase.firestore().collection('items').doc(itemId).get();
-
+    
         const itemData = itemDoc.data();
         setItem(itemData);
         setLoading(false);
