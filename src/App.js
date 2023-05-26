@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ItemListContainer from './components/ItemListContainer';
 import ItemDetailContainer from './components/ItemDetailContainer';
 import NavBar from './components/NavBar';
-import CartWidget from './components/CartWidget';
 import { useCartContext } from './components/CartContext';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import { AuthProvider } from './auth/AuthContext';
 import CreateTask from './components/CreateTask';
-
-
+import Checkout from './components/Checkout';
 
 import './index.css';
 
@@ -27,7 +25,8 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-const auth = firebase.auth();
+
+export { db }; // Exporta la instancia de Firestore
 
 function App() {
   const { cartItems, addItemToCart } = useCartContext();
@@ -42,36 +41,6 @@ function App() {
     fetchCategories();
   }, []);
 
-  const createOrder = async () => {
-    try {
-      const order = {
-        buyer: {
-          name: 'An Ecommerce Client',
-          email: 'client@coderhouse.com',
-          phone: '123456789',
-        },
-        items: cartItems.map((cartItem) => ({
-          id: cartItem.id,
-          title: cartItem.title,
-          quantity: cartItem.quantity,
-          price: cartItem.price,
-        })),
-        date: firebase.firestore.FieldValue.serverTimestamp(),
-      };
-
-      const ordersCollection = db.collection('orders');
-      const docRef = await ordersCollection.add(order);
-      const orderId = docRef.id;
-
-      console.log('Orden creada con ID:', orderId);
-
-      // Restablecer el carrito después de crear la orden
-      // Implementa tu lógica para restablecer el carrito aquí
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const handleAddToCart = (item, quantity) => {
     const itemIndex = cartItems.findIndex((cartItem) => cartItem.id === item.id);
     if (itemIndex === -1) {
@@ -79,6 +48,7 @@ function App() {
     } else {
       const newCartItems = [...cartItems];
       newCartItems[itemIndex].quantity += quantity;
+      addItemToCart(newCartItems);
     }
   };
 
@@ -95,23 +65,10 @@ function App() {
     }
   };
 
-  const getItemById = async (itemId) => {
-    try {
-      const itemDoc = await db.collection('items').doc(itemId).get();
-
-      const itemData = itemDoc.data();
-      return itemData;
-    } catch (error) {
-      console.log(error);
-      return null;
-    }
-  };
-
   return (
-    <BrowserRouter>
+    <Router>
       <AuthProvider db={db}>
         <NavBar brandLink="/" categories={categories} />
-        <CartWidget />
         <Routes>
           <Route
             path="/"
@@ -128,26 +85,14 @@ function App() {
           />
           <Route
             path="/item/:itemId"
-            element={
-              <ItemDetailContainer
-                onAddToCart={handleAddToCart}
-                getItem={getItemById}
-              />
-            }
+            element={<ItemDetailContainer onAddToCart={handleAddToCart} />}
           />
-          <Route
-            path="/createtask"
-            element={<CreateTask />}
-          />
+          <Route path="/createtask" element={<CreateTask />} />
+          <Route path="/checkout" element={<Checkout />} />
         </Routes>
-        <button onClick={createOrder}>Crear Orden</button>
       </AuthProvider>
-    </BrowserRouter>
+    </Router>
   );
 }
 
 export default App;
-
-
-
-

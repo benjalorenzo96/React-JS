@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ItemList from './ItemList';
 import { useParams } from 'react-router-dom';
-import firebase from 'firebase/compat/app'; // Actualizado
-
-import 'firebase/compat/firestore'; // Actualizado
-
+import { db } from '../firebase';
 
 const ItemListContainer = ({ greeting }) => {
   const { categoryId } = useParams();
@@ -14,24 +11,23 @@ const ItemListContainer = ({ greeting }) => {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const itemsCollection = firebase.firestore().collection('items');
+        const itemsCollection = db.collection('cuadros');
     
         let query = itemsCollection;
         if (categoryId) {
-          query = query.where('categoryld', '==', categoryId);
+          query = query.where('category', '==', categoryId);
         }
     
         const querySnapshot = await query.get();
     
-        const fetchedItems = querySnapshot.docs.map((doc) => doc.data());
+        const fetchedItems = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
         setItems(fetchedItems);
         setLoading(false);
       } catch (error) {
         console.log(error);
       }
     };
-
-
+    
     fetchItems();
   }, [categoryId]);
 
@@ -39,7 +35,7 @@ const ItemListContainer = ({ greeting }) => {
     <>
       <h1>{greeting}</h1>
       {loading ? (
-        <p>Loading...</p>
+        <p>Cargando...</p>
       ) : (
         <ItemList items={items} />
       )}
@@ -48,12 +44,5 @@ const ItemListContainer = ({ greeting }) => {
 };
 
 export default ItemListContainer;
-
-
-
-
-
-
-
 
 

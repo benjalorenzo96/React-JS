@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { CartProvider } from './components/CartContext';
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";

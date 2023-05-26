@@ -1,0 +1,158 @@
+.body {
+  margin: 0%;
+  padding: 0%;
+}
+
+  /* CSS de NavBar.jsx */
+
+.navbar-container {
+    background-color: #333;
+    color: #f2f2f2;
+    padding: 0.5rem 1rem;
+  }
+  
+  .navbar-brand {
+    font-size: 1.5rem;
+    color: #f2f2f2;
+    padding: 10%;
+    font-family: 'Arial', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: bold;
+  }
+  
+  
+  .navbar-toggler {
+    border-color: transparent;
+  }
+  
+  .navbar-nav .nav-link {
+    color: #f2f2f2;
+    font-size: 1rem;
+    margin-right: 0.5rem;
+  }
+  
+  .nav-dropdown .dropdown-item {
+    color: #333;
+    right: 0;
+  }
+
+  
+  .cart-link {
+    color: #f2f2f2;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+  }
+  
+  .cart-link:hover {
+    color: #f2f2f2;
+  }
+  
+  @media (max-width: 767.98px) {
+    .navbar-toggler {
+      margin-right: 0;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .navbar-nav {
+      margin-left: auto;
+    }
+  
+    .navbar-nav .nav-link {
+      margin-right: 1rem;
+    }
+  
+    .nav-dropdown {
+      margin-left: auto;
+    }
+  }
+  
+  /* CSS de Item.jsx */
+  .item-image {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    margin: 5%;
+    padding: 5%;
+    width: 200px;
+    height: 200px; 
+  }
+
+  .item-image-dos {
+    max-width: 100px; 
+    height: auto; 
+    border: 1px solid #ccc; 
+    border-radius: 4px; 
+    margin-bottom: 10px; 
+  }
+  
+  /* CSS para ItemDetailContainer.jsx */
+  
+  .item-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 10px;
+    padding: 10px;
+  }
+  
+  .item-price {
+    font-size: 1.2rem;
+    color: #888;
+    margin: 10px;
+    padding: 10px;
+  }
+  
+  .item-add-to-cart-btn {
+    background-color: #007bff;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
+    padding: 10px;
+  }
+  
+  .item-add-to-cart-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .item-checkout-btn {
+    background-color: #28a745;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
+    padding: 10px;
+  }
+  
+  .item-checkout-btn:hover {
+    background-color: #1e7e34;
+  }
+  .item-add-to-cart-btn{
+    background-color: #007bff;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
+    padding: 10px;
+  }
+
+  /* CSS para ItemCount */
+
+  .numero{
+    background-color: #007bff;
+    color: #020202;
+    font-weight: bold;
+    font-size: 100%;
+    border-radius: 10%;
+    padding: 0.5rem 1rem;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
+    padding: 10px;
+  }
+

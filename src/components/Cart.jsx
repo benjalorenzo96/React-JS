@@ -1,53 +1,102 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCartContext } from './CartContext';
 
 const Cart = () => {
-  const { cart, removeItem } = useCartContext();
+  const { cartItems, removeItemFromCart } = useCartContext();
+  const navigate = useNavigate();
 
   const handleRemoveItem = (itemId) => {
-    removeItem(itemId);
+    removeItemFromCart(itemId);
   };
 
   const renderCartItem = (item) => {
     return (
-      <div key={item.id}>
-        <h3>{item.name}</h3>
-        <p>Quantity: {item.quantity}</p>
-        <p>Price: {item.price}</p>
-        <button onClick={() => handleRemoveItem(item.id)}>Remove</button>
+      <div key={item.id} className="card mb-3">
+        <div className="card-body">
+          <h3 className="card-title">{item.name}</h3>
+          <p className="card-text">Cantidad: {item.quantity}</p>
+          <p className="card-text">Precio: ${item.price}</p>
+          <img
+            src={item.image}
+            alt={item.name}
+            className="card-img-top"
+            style={{ maxWidth: '200px' }}
+          />
+          <button
+            onClick={() => handleRemoveItem(item.id)}
+            className="btn btn-danger"
+          >
+            Remover
+          </button>
+        </div>
       </div>
     );
   };
 
   const renderCartItems = () => {
-    if (cart.length === 0) {
+    if (cartItems.length === 0) {
       return (
         <div>
-          <p>No items in the cart.</p>
-          <Link to="/">Go back to the store</Link>
+          <p>No hay elementos en el carrito.</p>
+          <Link to="/" className="btn btn-primary">
+            Volver a la Tienda
+          </Link>
         </div>
       );
     }
 
-    return cart.map(renderCartItem);
+    return cartItems.map(renderCartItem);
   };
 
   const calculateTotalPrice = () => {
-    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+    const totalPrice = cartItems.reduce((total, item) => {
+      const price = parseFloat(item.price);
+      const quantity = parseInt(item.quantity);
+
+      if (!isNaN(price) && !isNaN(quantity) && price > 0 && quantity > 0) {
+        return total + price * quantity;
+      } else {
+        console.log('Invalid price or quantity:', item);
+        return total;
+      }
+    }, 0);
+
+    return totalPrice.toFixed(2);
+  };
+
+  const handleCheckout = () => {
+    navigate('/checkout');
   };
 
   return (
     <div>
-      <h2>Cart</h2>
-      {renderCartItems()}
-      <p>Total Price: {calculateTotalPrice()}</p>
+      <h2>Carrito de Compras</h2>
+      <div className="container">
+        <div className="row">
+          <div className="col-lg-8">{renderCartItems()}</div>
+          <div className="col-lg-4">
+            <div className="card">
+              <div className="card-body">
+                <h5 className="card-title">Resumen de Compra</h5>
+                <p className="card-text">
+                  Precio Total: ${calculateTotalPrice()}
+                </p>
+                <Link to="/" className="btn btn-primary">
+                  Continuar Comprando
+                </Link>
+                <Link to="/checkout">
+                  <button onClick={handleCheckout}>
+                    Terminar mi compra
+                  </button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
 export default Cart;
-
-
-
-

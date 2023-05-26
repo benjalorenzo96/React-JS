@@ -1,60 +1,45 @@
-import React, { useContext, useState, useEffect } from 'react';
-import ItemCount from './ItemCount';
-import { Link } from 'react-router-dom';
-import { CartContext } from './CartContext';
-import { getItemById } from '../mockAPI'; // Importa la función getItemById desde mockAPI.js
+import React, { useState } from 'react';
+import { useCartContext } from './CartContext';
+import "./style.css";
 
-function ItemDetail({ itemId }) {
-  const [quantity, setQuantity] = useState(0);
-  const [showItemCount, setShowItemCount] = useState(true);
-  const { addItem } = useContext(CartContext);
-  const [item, setItem] = useState(null); // Estado para almacenar el objeto del producto
 
-  useEffect(() => {
-    // Obtiene el objeto del producto utilizando getItemById(itemId)
-    const fetchItem = async () => {
-      const item = await getItemById(itemId);
-      setItem(item);
-    };
-
-    fetchItem();
-  }, [itemId]);
+const ItemDetail = ({ item }) => {
+  const { addItemToCart } = useCartContext();
+  const [selectedQuantity, setSelectedQuantity] = useState(1);
 
   const handleAddToCart = () => {
-    addItem(item, quantity);
-    setShowItemCount(false);
-  };
-
-  const handleCountChange = (count) => {
-    setQuantity(count);
+    addItemToCart(item, selectedQuantity);
   };
 
   return (
-    <div>
-      <h1>Item Detail</h1>
-
-      {item && showItemCount && (
-        <ItemCount
-          initial={quantity}
-          min={0}
-          max={10}
-          onCountChange={handleCountChange}
-          onAdd={handleAddToCart}
-        />
-      )}
-
-      <button>
-        <Link to="/cart">Terminar mi compra</Link>
-      </button>
+    <div className="card mb-3">
+      <div className="row g-0">
+        <div className="col-md-4">
+          <img src={item.image} alt={item.name} className="img-fluid" />
+        </div>
+        <div className="col-md-8">
+          <div className="card-body">
+            <h5 className="card-title">{item.name}</h5>
+            <p className="card-text">{item.description}</p>
+            <p className="card-text">Precio: ${item.price}</p>
+            <div className="form-group">
+              <label htmlFor="quantity">Cantidad:</label>
+              <input
+                type="number"
+                id="quantity"
+                className="form-control"
+                value={selectedQuantity}
+                onChange={(e) => setSelectedQuantity(parseInt(e.target.value))}
+                min={1}
+              />
+            </div>
+            <button onClick={handleAddToCart} className="btn btn-primary mt-3 item-add-to-cart-btn">Añadir al carrito</button>
+          </div>
+        </div>
+      </div>
     </div>
   );
-}
+};
 
 export default ItemDetail;
-
-
-
-
-
-
 
