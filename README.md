@@ -1,3 +1,51 @@
+# Proyecto de React
+
+Este es un proyecto de React que consiste en una aplicación de compras en línea. Permite a los usuarios ver y comprar productos, agregar elementos al carrito de compras, y finalizar la compra. También cuenta con una funcionalidad de creación de tareas para los usuarios registrados.
+
+## Tecnologías utilizadas
+
+El proyecto utiliza las siguientes tecnologías y bibliotecas:
+
+- React: biblioteca de JavaScript para construir interfaces de usuario.
+- React Router: biblioteca para el enrutamiento dentro de la aplicación.
+- Firebase: plataforma en la nube utilizada para la autenticación y el almacenamiento de datos.
+- Bootstrap: framework CSS para el diseño y la estructura de la interfaz de usuario.
+
+## Dependencias adicionales
+
+Se utilizan las siguientes dependencias adicionales a las trabajadas en clase:
+
+- react-router-dom: para el enrutamiento en la aplicación.
+- firebase: para la integración con Firebase, incluyendo la autenticación y el almacenamiento de datos.
+- bootstrap: para los estilos y la estructura de la interfaz de usuario.
+
+## Configuración de Firebase
+
+Antes de ejecutar la aplicación, es necesario configurar Firebase. Se deben reemplazar los valores de configuración de Firebase en los archivos `App.js`, `index.js`, `Checkout.js` y `CreateTask.js` con las credenciales y la configuración de tu propio proyecto de Firebase.
+
+## Estructura de archivos
+
+La estructura de archivos del proyecto es la siguiente:
+
+- `App.js`: componente principal que define las rutas y las páginas principales de la aplicación.
+- `index.js`: punto de entrada de la aplicación que renderiza el componente principal.
+- `components/ItemListContainer.js`: componente que muestra la lista de productos.
+- `components/ItemDetailContainer.js`: componente que muestra los detalles de un producto.
+- `components/NavBar.js`: componente de la barra de navegación.
+- `components/CartContext.js`: contexto y proveedor para el carrito de compras.
+- `components/CreateTask.js`: componente para crear una tarea.
+- `components/Checkout.js`: componente para finalizar la compra.
+- `index.css`: archivo CSS para los estilos globales de la aplicación.
+
+## Contribuciones
+
+Este proyecto es parte de un curso de programación y no se aceptan contribuciones externas en este momento.
+
+## Licencia
+
+Este proyecto se distribuye bajo la licencia MIT. Ver el archivo `LICENSE` para más detalles.
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
